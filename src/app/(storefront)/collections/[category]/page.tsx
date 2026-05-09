@@ -94,8 +94,8 @@ export default async function CollectionPage({ params }: { params: Promise<{ cat
              {/* Mock Product Cards */}
              {[1,2,3,4,5,6].map((item) => (
                 <Link key={item} href={`/products/mock-wig-${item}`} className="group">
-                  <div className="aspect-w-3 aspect-h-4 bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition duration-500" style={{ backgroundImage: "url('/assets/hero_wig_straight_1778364904239.png')" }}></div>
+                  <div className="aspect-[3/4] bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition duration-500" style={{ backgroundImage: `url('/assets/${item % 2 === 0 ? 'hero_wig_curly_1778364916891.png' : 'hero_wig_straight_1778364904239.png'}')` }}></div>
                     {item === 1 && (
                       <span className="absolute top-2 left-2 bg-black text-white text-xs font-bold px-2 py-1 rounded">BEST SELLER</span>
                     )}
