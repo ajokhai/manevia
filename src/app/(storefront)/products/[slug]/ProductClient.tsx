@@ -10,6 +10,15 @@ export default function ProductClient({ slug }: { slug: string }) {
   const [selectedDensity, setSelectedDensity] = useState('180%');
   const [isTryOnModalOpen, setIsTryOnModalOpen] = useState(false);
   const [tryOnState, setTryOnState] = useState<'idle' | 'processing' | 'result'>('idle');
+  
+  const mockImages = [
+    '/assets/hero_wig_curly_1778364916891.png',
+    '/assets/hero_wig_straight_1778364904239.png',
+    '/assets/vendor_preview_1_1778364930415.png',
+    '/assets/vendor_preview_2_1778364945413.png'
+  ];
+  const [activeImage, setActiveImage] = useState(mockImages[0]);
+  
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = () => {
@@ -17,7 +26,7 @@ export default function ProductClient({ slug }: { slug: string }) {
       productId: slug,
       name: "Ready to Go Blonde Highlight Water Wave Short Curly Bob Wig",
       price: 118.33,
-      image: "/assets/hero_wig_curly_1778364916891.png",
+      image: activeImage,
       quantity: 1,
       variants: { length: selectedLength, density: selectedDensity }
     });
@@ -48,9 +57,22 @@ export default function ProductClient({ slug }: { slug: string }) {
       <div className="flex flex-col lg:flex-row gap-12">
         {/* Gallery */}
         <div className="w-full lg:w-3/5 space-y-4">
-          <div className="aspect-w-3 aspect-h-4 bg-gray-100 rounded-2xl overflow-hidden relative sticky top-24">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/hero_wig_curly_1778364916891.png')" }}></div>
+          <div className="aspect-[3/4] bg-gray-100 rounded-2xl overflow-hidden relative">
+            <div className="absolute inset-0 bg-cover bg-center transition-all duration-300" style={{ backgroundImage: `url('${activeImage}')` }}></div>
             <span className="absolute top-4 left-4 bg-black text-white text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wide">Ready to Go</span>
+          </div>
+          
+          {/* Thumbnails */}
+          <div className="grid grid-cols-4 gap-4">
+            {mockImages.map((img, idx) => (
+              <button 
+                key={idx}
+                onClick={() => setActiveImage(img)}
+                className={`aspect-square rounded-xl overflow-hidden relative border-2 transition-all ${activeImage === img ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-transparent hover:opacity-80'}`}
+              >
+                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${img}')` }}></div>
+              </button>
+            ))}
           </div>
         </div>
 

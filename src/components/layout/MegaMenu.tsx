@@ -65,7 +65,7 @@ export default function MegaMenu() {
           {/* Icons */}
           <div className="flex items-center space-x-4">
             <button className="text-gray-900 hover:text-amber-600"><Search size={20} /></button>
-            <Link href="/admin" className="text-gray-900 hover:text-amber-600"><User size={20} /></Link>
+            <Link href="/account" className="text-gray-900 hover:text-amber-600"><User size={20} /></Link>
             <button className="text-gray-900 hover:text-amber-600 relative">
               <ShoppingBag size={20} />
               <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
