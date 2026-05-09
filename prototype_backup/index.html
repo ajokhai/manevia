@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manevia | Premium Wig Discovery</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Home Screen -->
+        <div id="screen-home" class="screen active">
+            <header class="header">
+                <h1>Find your next wig</h1>
+                <p style="color: var(--text-muted)">Premium discovery, effortless ordering.</p>
+            </header>
+
+            <div class="category-scroll">
+                <div class="category-chip active">All</div>
+                <div class="category-chip">Straight</div>
+                <div class="category-chip">Curly</div>
+                <div class="category-chip">Frontals</div>
+                <div class="category-chip">Custom</div>
+            </div>
+
+            <div class="section-title">
+                <h3>Trending Now</h3>
+                <span style="font-size: 14px; color: var(--soft-gold)">See all</span>
+            </div>
+            
+            <div class="curated-grid">
+                <div class="curated-card" onclick="navigateTo('vendor-list')">
+                    <img src="hero_wig_straight_1778364904239.png" alt="Straight Wig">
+                    <div class="info">
+                        <h4>Bone Straight Silk</h4>
+                        <span class="price">₦120,000</span>
+                    </div>
+                </div>
+                <div class="curated-card" onclick="navigateTo('vendor-list')">
+                    <img src="hero_wig_curly_1778364916891.png" alt="Curly Wig">
+                    <div class="info">
+                        <h4>Deep Wave Premium</h4>
+                        <span class="price">₦95,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h3>Top Vendors</h3>
+            </div>
+            <div class="vendor-list" id="home-vendor-preview">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Vendor List Screen -->
+        <div id="screen-vendor-list" class="screen">
+            <div class="nav-back" onclick="navigateTo('home')">← Back to discovery</div>
+            <header class="header">
+                <h2>Top Wig Vendors</h2>
+            </header>
+            <div class="vendor-list" id="main-vendor-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Vendor Page -->
+        <div id="screen-vendor-page" class="screen">
+            <div class="nav-back" onclick="navigateTo('vendor-list')">← Back to vendors</div>
+            <div id="vendor-details">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Order Flow -->
+        <div id="screen-order" class="screen">
+            <div class="nav-back" onclick="navigateTo('vendor-page')">← Cancel</div>
+            <header class="header">
+                <h2>Complete Your Order</h2>
+            </header>
+            <div class="form-group">
+                <label>Delivery Name</label>
+                <input type="text" placeholder="e.g. Joshua Ayokhai">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="e.g. +234 800 000 0000">
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" placeholder="Full delivery address">
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('success')">Confirm Order</button>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="screen-success" class="screen">
+            <div class="success-icon">✓</div>
+            <div style="text-align: center">
+                <h2>Order Confirmed!</h2>
+                <p style="margin: 16px 0 32px; color: var(--text-muted)">Your vendor has been notified. Get ready for your new look!</p>
+                <button class="btn btn-primary" onclick="navigateTo('home')">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
