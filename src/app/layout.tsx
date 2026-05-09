@@ -44,6 +44,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
+        
+        {/* Inconspicuous Admin Link */}
+        <div className="fixed bottom-0 w-full flex justify-center py-1 opacity-20 hover:opacity-100 transition-opacity duration-300 z-50 pointer-events-none">
+          <a href="/admin" className="pointer-events-auto text-[10px] uppercase tracking-widest text-gray-500 hover:text-black font-medium">
+            Admin Portal
+          </a>
+        </div>
       </body>
     </html>
   );
