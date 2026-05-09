@@ -48,11 +48,32 @@ If you have live users from Phase 1, you need to migrate their data from Vercel 
 Once the data is ported, simply paste your new API keys into the **Vercel Settings > Environment Variables** tab and change `NEXT_PUBLIC_APP_MODE` to `"production"`.
 
 Where to get your keys:
-1. **Database (`MONGODB_URI`)**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-2. **Payments (`PAYSTACK_PUBLIC_KEY` / `SECRET_KEY`)**: [Paystack](https://dashboard.paystack.com/#/settings/api-keys-webhooks)
-3. **Emails (`RESEND_API_KEY`)**: [Resend](https://resend.com/api-keys)
-4. **AI Engine (`GEMINI_API_KEY`)**: [Google AI Studio](https://aistudio.google.com/app/apikey)
-5. **Image Storage (`NEXT_PUBLIC_CLOUDINARY...`)**: [Cloudinary](https://cloudinary.com/) (Only if moving away from Vercel Blob)
+
+1. **Database (`MONGODB_URI`)**: 
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create a free account. 
+   - Build a "Free Cluster". Click "Connect", choose "Drivers", and copy the long connection string. It will look like `mongodb+srv://...`. Paste that here.
+   
+2. **Payments (`NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` & `PAYSTACK_SECRET_KEY`)**: 
+   - Go to [Paystack](https://dashboard.paystack.com/#/settings/api-keys-webhooks). 
+   - Look under the "API Keys & Webhooks" tab. Copy the "Public Key" (starts with `pk_`) into the first variable, and the "Secret Key" (starts with `sk_`) into the second.
+   
+3. **Emails (`RESEND_API_KEY`)**: 
+   - Go to [Resend](https://resend.com/api-keys) and sign up. 
+   - Click "Create API Key", give it a name, and copy the string that starts with `re_`.
+   
+4. **AI Engine (`GEMINI_API_KEY`)**: 
+   - Go to [Google AI Studio](https://aistudio.google.com/app/apikey). 
+   - Click "Create API Key". Copy the random string of letters and numbers.
+   
+5. **Image Storage (`NEXT_PUBLIC_CLOUDINARY...`)**: 
+   - *Note: Only required if you decide to stop using Vercel Blob.* 
+   - Go to [Cloudinary](https://cloudinary.com/) and copy your "Cloud Name", "API Key", and "API Secret" directly from the dashboard overview.
+   
+6. **Authentication (`NEXTAUTH_SECRET`)**: 
+   - This is not an API key! It is simply a random password you make up right now (like `my_super_secret_string_123!`). The app uses it to encrypt user login sessions.
+   
+7. **Authentication (`NEXTAUTH_URL`)**: 
+   - *Optional.* Vercel handles this automatically for you. You can leave it blank.
 
 Once you paste these into Vercel, the app upgrades itself instantly!
 
