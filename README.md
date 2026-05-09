@@ -25,7 +25,7 @@ Right now, the application is set up to run a LIVE, fully functional MVP using V
 4. Once deployed, click on the **"Storage"** tab in your Vercel Dashboard.
 5. Provision two things:
    - **Neon (Serverless Postgres)**: Scroll down to the "Marketplace Database Providers" section and click Create. This handles all your database storage.
-   - **Blob (Fast object storage)**: Found near the top of the page. Click Create. This handles your image uploads.
+   - **Blob (Fast object storage)**: Found near the top of the page. Click Create. **When prompted, ensure you select "Public"** so your customers can see the product images on the storefront.
 6. Vercel will automatically inject the necessary environment variables (`POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`) into your app.
 
 *The site is now live! Your database works, image uploads work, and you can start onboarding real users immediately.*
