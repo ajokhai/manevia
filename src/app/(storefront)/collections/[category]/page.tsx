@@ -1,5 +1,21 @@
 import Link from 'next/link';
 import { Filter, ChevronDown, Star } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
+  const title = category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  
+  return {
+    title: `${title} Wigs`,
+    description: `Shop our exclusive collection of ${title} wigs. Find the perfect length, density, and texture to match your style.`,
+    openGraph: {
+      title: `${title} Wigs | Manevia Collection`,
+      description: `Explore Manevia's top-rated ${title} wigs with HD lace and 100% Virgin Human Hair.`,
+      type: 'website',
+    }
+  };
+}
 
 export default async function CollectionPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;

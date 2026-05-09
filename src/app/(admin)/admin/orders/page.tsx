@@ -1,4 +1,5 @@
 import { Search, Filter, Eye, Truck, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminOrders() {
   return (
@@ -75,13 +76,19 @@ export default function AdminOrders() {
                     )}
                   </td>
                   <td className="p-4 text-right">
-                    <button className="text-blue-600 hover:text-blue-800 font-medium mr-4 text-xs bg-blue-50 px-2 py-1 rounded">
+                    <Link 
+                      href={`/admin/orders/MAN-100${i}`}
+                      className="text-blue-600 hover:text-blue-800 font-medium mr-4 text-xs bg-blue-50 px-2 py-1 rounded inline-block"
+                    >
                       View Details
-                    </button>
+                    </Link>
                     {i <= 2 && (
-                      <button className="text-white bg-black hover:bg-gray-800 font-medium text-xs px-2 py-1 rounded">
+                      <Link 
+                        href={`/admin/orders/MAN-100${i}`}
+                        className="text-white bg-black hover:bg-gray-800 font-medium text-xs px-2 py-1 rounded inline-block"
+                      >
                         Fulfill
-                      </button>
+                      </Link>
                     )}
                   </td>
                 </tr>

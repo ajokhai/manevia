@@ -12,12 +12,51 @@ Manevia is an enterprise-grade Next.js application built to deliver a premium eC
 
 ---
 
-## 🚀 The Zero-Dependency Demo Mode
+## 🚀 The "Double Architecture" Deployment
 
-This repository is currently configured for a **Zero-Dependency Client Demo**.
-To ensure a flawless presentation out of the box, the frontend UI, the AI Virtual Try-On, and the Checkout process are utilizing hardcoded mock data and simulated API delays.
+Manevia is built with a **Seamless Dual-Mode Architecture**, designed specifically so non-technical users can launch the site immediately, and upgrade to full production later without writing code or rebuilding the app.
 
-**You do NOT need any environment variables to run or deploy the demo.**
+### Phase 1: Live MVP (Vercel Infrastructure)
+Right now, the application is set up to run a LIVE, fully functional MVP using Vercel's zero-config infrastructure. **You do not need to hunt down external API keys to launch this.**
+
+1. Push this repository to GitHub.
+2. Go to [Vercel.com](https://vercel.com/new).
+3. Import the GitHub repository and click **Deploy**.
+4. Once deployed, click on the **"Storage"** tab in your Vercel Dashboard.
+5. Provision two things:
+   - **Vercel Postgres** (For the Database)
+   - **Vercel Blob** (For the Image Uploads)
+6. Vercel will automatically inject the necessary environment variables (`POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`) into your app.
+
+*The site is now live! Your database works, image uploads work, and you can start onboarding real users immediately.*
+
+---
+
+### Phase 2: The Production Upgrade (Custom Infrastructure)
+When you are ready to process real money and move data to a dedicated MongoDB cluster, you do not need to change the application code. 
+
+#### Step 1: Porting the Data
+If you have live users from Phase 1, you need to migrate their data from Vercel Postgres to MongoDB. We have built an automated script for this.
+1. Ensure both `POSTGRES_URL` (from Vercel) and `MONGODB_URI` (your new MongoDB Atlas string) are in your local `.env` file.
+2. Run the migration script:
+   ```bash
+   npx tsx scripts/migrate-to-mongo.ts
+   ```
+   *This script will safely extract all users, products, and orders from Postgres and inject them into MongoDB.*
+
+#### Step 2: Injecting the API Keys
+Once the data is ported, simply paste your new API keys into the **Vercel Settings > Environment Variables** tab and change `NEXT_PUBLIC_APP_MODE` to `"production"`.
+
+Where to get your keys:
+1. **Database (`MONGODB_URI`)**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+2. **Payments (`PAYSTACK_PUBLIC_KEY` / `SECRET_KEY`)**: [Paystack](https://dashboard.paystack.com/#/settings/api-keys-webhooks)
+3. **Emails (`RESEND_API_KEY`)**: [Resend](https://resend.com/api-keys)
+4. **AI Engine (`GEMINI_API_KEY`)**: [Google AI Studio](https://aistudio.google.com/app/apikey)
+5. **Image Storage (`NEXT_PUBLIC_CLOUDINARY...`)**: [Cloudinary](https://cloudinary.com/) (Only if moving away from Vercel Blob)
+
+Once you paste these into Vercel, the app upgrades itself instantly!
+
+---
 
 ### Running Locally
 ```bash

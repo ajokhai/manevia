@@ -1,8 +1,9 @@
 'use client';
 
 import { useUserStore, User } from '@/store/userStore';
-import { Search, LogIn, User as UserIcon } from 'lucide-react';
+import { Search, LogIn, User as UserIcon, ExternalLink } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function AdminUsers() {
   const router = useRouter();
@@ -72,6 +73,12 @@ export default function AdminUsers() {
                     <span className="bg-green-100 text-green-800 py-1 px-2 rounded-full text-xs font-medium">Active</span>
                   </td>
                   <td className="p-4 text-right">
+                    <Link 
+                      href={`/admin/users/${user.id}`}
+                      className="inline-flex items-center text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition mr-3"
+                    >
+                      View Profile <ExternalLink size={14} className="ml-1" />
+                    </Link>
                     <button 
                       onClick={() => handleImpersonate(user)}
                       className="inline-flex items-center text-sm font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition"

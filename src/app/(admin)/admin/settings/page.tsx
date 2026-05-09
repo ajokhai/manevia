@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings, Save, Shield, CreditCard, Bell, Key, RefreshCcw } from 'lucide-react';
+import { Settings, Save, Shield, CreditCard, Bell, Key, RefreshCcw, LineChart } from 'lucide-react';
 
 export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState('general');
@@ -40,6 +40,12 @@ export default function AdminSettings() {
             >
               <Bell size={16} className="mr-2" /> Notifications
             </button>
+            <button 
+              onClick={() => setActiveTab('tracking')}
+              className={`w-full flex items-center text-left px-3 py-2 rounded-lg font-medium text-sm transition ${activeTab === 'tracking' ? 'bg-white shadow-sm text-amber-600' : 'text-gray-600 hover:bg-white hover:shadow-sm'}`}
+            >
+              <LineChart size={16} className="mr-2" /> Tracking & SEO
+            </button>
           </div>
 
           {/* Content */}
@@ -47,22 +53,54 @@ export default function AdminSettings() {
             {activeTab === 'general' && (
               <div className="animate-in fade-in duration-300">
                 <h2 className="text-lg font-bold mb-6">General Settings</h2>
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Store Name</label>
-                    <input type="text" defaultValue="Manevia" className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Support Email</label>
-                    <input type="email" defaultValue="support@manevia.com" className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">AI Try-On Engine Status</label>
-                    <div className="flex items-center space-x-3 mt-2">
-                      <div className="w-12 h-6 bg-green-500 rounded-full relative cursor-pointer">
-                        <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+                <div className="space-y-8">
+                  <div className="space-y-6 pb-6 border-b">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Store Name</label>
+                      <input type="text" defaultValue="Manevia" className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Support Email</label>
+                      <input type="email" defaultValue="support@manevia.com" className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">AI Try-On Engine Status</label>
+                      <div className="flex items-center space-x-3 mt-2">
+                        <div className="w-12 h-6 bg-green-500 rounded-full relative cursor-pointer">
+                          <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+                        </div>
+                        <span className="text-sm text-gray-600 font-medium">Nano Banana Pipeline Active</span>
                       </div>
-                      <span className="text-sm text-gray-600 font-medium">Nano Banana Pipeline Active</span>
+                    </div>
+                  </div>
+
+                  {/* Brand Assets */}
+                  <div>
+                    <h3 className="text-md font-bold mb-4">Brand Assets</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      
+                      <div className="border rounded-xl p-6 bg-white text-center">
+                        <h4 className="text-sm font-medium mb-2">Favicon</h4>
+                        <div className="w-16 h-16 bg-black text-white rounded-lg mx-auto flex items-center justify-center text-2xl font-bold mb-4 shadow-sm">
+                          M
+                        </div>
+                        <button className="text-xs font-semibold bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition w-full">
+                          Upload New Favicon
+                        </button>
+                        <p className="text-[10px] text-gray-400 mt-2">Recommended: 32x32px PNG or SVG</p>
+                      </div>
+
+                      <div className="border rounded-xl p-6 bg-white text-center">
+                        <h4 className="text-sm font-medium mb-2">Default Social Share Image</h4>
+                        <div className="w-full h-24 bg-gray-100 rounded-lg mx-auto mb-4 overflow-hidden border relative">
+                           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/hero_wig_straight_1778364904239.png')" }}></div>
+                        </div>
+                        <button className="text-xs font-semibold bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition w-full">
+                          Upload Thumbnail
+                        </button>
+                        <p className="text-[10px] text-gray-400 mt-2">Recommended: 1200x630px JPG/PNG</p>
+                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -156,6 +194,41 @@ export default function AdminSettings() {
                       <p className="text-xs text-gray-500">Weekly digest of products with less than 5 items in stock.</p>
                     </div>
                   </label>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'tracking' && (
+              <div className="animate-in fade-in duration-300">
+                <h2 className="text-lg font-bold mb-6">Tracking Pixels & Custom Scripts</h2>
+                <p className="text-sm text-gray-500 mb-6">Inject custom JavaScript for analytics, Meta Pixels, Google Tag Manager, or live chat widgets directly into the storefront without modifying code.</p>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Global &lt;head&gt; Scripts</label>
+                    <p className="text-xs text-gray-400 mb-2">These scripts execute immediately when the page starts loading. Ideal for Meta Pixels and Google Analytics.</p>
+                    <textarea 
+                      rows={5} 
+                      placeholder="<!-- Paste your Meta Pixel Code Here -->&#10;<script>&#10;  ...&#10;</script>" 
+                      className="w-full border rounded-lg px-4 py-3 font-mono text-xs focus:ring-2 focus:ring-amber-500 bg-gray-50" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Global &lt;body&gt; Scripts</label>
+                    <p className="text-xs text-gray-400 mb-2">Ideal for Google Tag Manager (noscript) or deferred live chat widgets.</p>
+                    <textarea 
+                      rows={5} 
+                      placeholder="<!-- Paste your GTM (noscript) code here -->" 
+                      className="w-full border rounded-lg px-4 py-3 font-mono text-xs focus:ring-2 focus:ring-amber-500 bg-gray-50" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Default Meta Description</label>
+                    <textarea 
+                      rows={2} 
+                      defaultValue="Shop the finest virgin human hair, glueless minimalist lace, and premium wigs. Try on wigs instantly with Manevia’s AI Virtual Try-On Studio." 
+                      className="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-500" 
+                    />
+                  </div>
                 </div>
               </div>
             )}

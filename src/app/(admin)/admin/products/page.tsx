@@ -1,4 +1,5 @@
 import { Plus, Search, Filter, MoreVertical, Edit, Trash } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminProducts() {
   return (
@@ -8,9 +9,12 @@ export default function AdminProducts() {
           <h1 className="text-2xl font-bold">Product Information Management</h1>
           <p className="text-sm text-gray-500 mt-1">Manage your wig catalog, pricing, and variants.</p>
         </div>
-        <button className="bg-black text-white px-4 py-2 rounded-lg font-medium flex items-center hover:bg-gray-800 transition">
+        <Link 
+          href="/admin/products/new"
+          className="bg-black text-white px-4 py-2 rounded-lg font-medium flex items-center hover:bg-gray-800 transition"
+        >
           <Plus size={18} className="mr-2" /> Add New Wig
-        </button>
+        </Link>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
@@ -71,8 +75,10 @@ export default function AdminProducts() {
                   <td className="p-4 text-gray-600">Water Wave</td>
                   <td className="p-4 font-medium text-gray-900">$118.33</td>
                   <td className="p-4 text-right">
-                    <button className="text-gray-400 hover:text-black p-1"><Edit size={16} /></button>
-                    <button className="text-gray-400 hover:text-red-600 p-1 ml-2"><Trash size={16} /></button>
+                    <Link href={`/admin/products/WIG-${1000+i}`} className="text-gray-400 hover:text-black p-1 inline-block">
+                      <Edit size={16} />
+                    </Link>
+                    <button className="text-gray-400 hover:text-red-600 p-1 ml-2 inline-block"><Trash size={16} /></button>
                   </td>
                 </tr>
               ))}
