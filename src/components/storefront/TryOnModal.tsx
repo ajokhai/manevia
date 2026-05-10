@@ -22,9 +22,9 @@
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Sparkles, Upload, Camera, X, CheckCircle, RotateCcw, ShoppingBag, AlertCircle } from 'lucide-react';
+import { Sparkles, Upload, Camera, X, CheckCircle, RotateCcw, ShoppingBag, AlertCircle, Download } from 'lucide-react';
 
-type TryOnState = 'idle' | 'camera' | 'preview' | 'processing' | 'result' | 'error';
+type TryOnState = 'idle' | 'camera' | 'preview' | 'processing' | 'result' | 'error' | 'rate_limited';
 
 interface TryOnModalProps {
   isOpen: boolean;
@@ -39,6 +39,8 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [rateLimitMsg, setRateLimitMsg] = useState('');
+  const [remaining, setRemaining] = useState<number | null>(null);
   const [processingStep, setProcessingStep] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +70,7 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
     setUserPhoto(null);
     setResultImage(null);
     setErrorMsg('');
+    setRateLimitMsg('');
     onClose();
   }, [stopCamera, onClose]);
 
@@ -75,6 +78,39 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
   useEffect(() => {
     return () => stopCamera();
   }, [stopCamera]);
+
+  // ── RATE LIMIT CHECK ─────────────────────────────────────────────────────────
+  const checkRateLimit = useCallback(async (productSlug: string): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/try-on/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'generate', productSlug }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.allowed) {
+        setRateLimitMsg(data.message ?? 'Rate limit reached. Please try again later.');
+        setState('rate_limited');
+        return false;
+      }
+      setRemaining(data.remaining);
+      return true;
+    } catch {
+      // If the API is unavailable, allow the try-on to proceed
+      return true;
+    }
+  }, []);
+
+  // ── DOWNLOAD RESULT ───────────────────────────────────────────────────────────
+  const handleDownload = useCallback(() => {
+    if (!resultImage) return;
+    const link = document.createElement('a');
+    link.href = resultImage;
+    link.download = `manevia-tryon-${Date.now()}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, [resultImage]);
 
   // ── FILE UPLOAD ──────────────────────────────────────────────────────────────
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,6 +180,10 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
    */
   const processWithCanvas = useCallback(async () => {
     if (!userPhoto || !canvasRef.current) return;
+
+    // Check rate limit before processing
+    const allowed = await checkRateLimit('current-product');
+    if (!allowed) return;
 
     setState('processing');
     setProcessingStep(0);
@@ -370,11 +410,14 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
               <div className="flex items-center justify-center gap-2 text-green-600 font-semibold">
                 <CheckCircle size={18} /> Flawless Fit!
               </div>
+              {remaining !== null && (
+                <p className="text-center text-xs text-gray-400">{remaining} free try-on{remaining === 1 ? '' : 's'} remaining this hour.</p>
+              )}
               <div className="rounded-2xl overflow-hidden aspect-video bg-black flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={resultImage} alt="Try-on result" className="h-full w-full object-cover" />
               </div>
-              <p className="text-xs text-center text-gray-400">
+              <p className="text-[11px] text-center text-gray-400">
                 This is a visual preview. Final look may vary based on your hair and skin tone.
               </p>
               <div className="flex gap-3">
@@ -385,12 +428,38 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
                   <RotateCcw size={14} /> Try Another
                 </button>
                 <button
+                  onClick={handleDownload}
+                  className="border border-amber-300 bg-amber-50 text-amber-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-amber-100 transition flex items-center justify-center gap-1"
+                  title="Save to your device"
+                >
+                  <Download size={14} />
+                </button>
+                <button
                   onClick={() => { onAddToCart(); handleClose(); }}
                   className="flex-1 bg-black text-white py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition flex items-center justify-center gap-2"
                 >
                   <ShoppingBag size={16} /> Add to Cart
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* RATE LIMITED */}
+          {state === 'rate_limited' && (
+            <div className="py-10 flex flex-col items-center justify-center text-center space-y-4">
+              <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center">
+                <Sparkles className="text-amber-400" size={26} />
+              </div>
+              <div>
+                <h3 className="font-bold text-base mb-1">You're on a roll!</h3>
+                <p className="text-sm text-gray-500 max-w-xs">{rateLimitMsg}</p>
+              </div>
+              <button
+                onClick={handleClose}
+                className="bg-black text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition"
+              >
+                Got it
+              </button>
             </div>
           )}
 
