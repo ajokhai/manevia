@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Star, ChevronRight, Check, Sparkles, ShieldCheck, CheckCircle } from 'lucide-react';
+import { Star, ChevronRight, Check, Sparkles, ShieldCheck } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
+import TryOnModal from '@/components/storefront/TryOnModal';
 
 export default function ProductClient({ slug }: { slug: string }) {
   const [selectedLength, setSelectedLength] = useState('16"');
   const [selectedDensity, setSelectedDensity] = useState('180%');
   const [isTryOnModalOpen, setIsTryOnModalOpen] = useState(false);
-  const [tryOnState, setTryOnState] = useState<'idle' | 'processing' | 'result'>('idle');
   
   const mockImages = [
     '/assets/hero_wig_curly_1778364916891.png',
@@ -35,13 +35,6 @@ export default function ProductClient({ slug }: { slug: string }) {
   const lengths = ['14"', '16"', '20"', '24"'];
   const densities = ['150%', '180%', '250%'];
 
-  const handleSimulateTryOn = () => {
-    setTryOnState('processing');
-    // Simulate AI pipeline delay (Nano Banana)
-    setTimeout(() => {
-      setTryOnState('result');
-    }, 3000);
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -166,82 +159,13 @@ export default function ProductClient({ slug }: { slug: string }) {
         </div>
       </div>
 
-      {/* Virtual Try-On Modal */}
-      {isTryOnModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden relative">
-            <button 
-              onClick={() => { setIsTryOnModalOpen(false); setTryOnState('idle'); }} 
-              className="absolute top-4 right-4 z-10 bg-white/80 p-2 rounded-full hover:bg-white text-black"
-            >
-              X
-            </button>
-            <div className="p-8 text-center border-b">
-              <Sparkles className="mx-auto text-amber-500 mb-4" size={32} />
-              <h2 className="text-2xl font-bold mb-2">Virtual Try-On Studio</h2>
-              <p className="text-gray-500">Upload a photo to see how this wig looks on you.</p>
-            </div>
-            
-            <div className="bg-gray-50 p-12 text-center min-h-[400px] flex flex-col justify-center items-center">
-              
-              {tryOnState === 'idle' && (
-                <div className="w-full">
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 bg-white mb-6">
-                    <button 
-                      onClick={handleSimulateTryOn}
-                      className="bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition"
-                    >
-                      Upload Photo
-                    </button>
-                    <p className="text-xs text-gray-400 mt-4">JPG or PNG, max 5MB</p>
-                  </div>
-                  <p className="text-sm text-gray-500">Or</p>
-                  <button onClick={handleSimulateTryOn} className="mt-4 text-amber-600 font-semibold underline hover:text-amber-800 transition">
-                    Use Camera
-                  </button>
-                </div>
-              )}
-
-              {tryOnState === 'processing' && (
-                <div className="flex flex-col items-center justify-center space-y-6">
-                  <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin"></div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-2">Nano Banana Engine Running...</h3>
-                    <p className="text-gray-500 text-sm animate-pulse">Detecting hairline and blending lace...</p>
-                  </div>
-                </div>
-              )}
-
-              {tryOnState === 'result' && (
-                <div className="w-full flex flex-col items-center animate-in fade-in zoom-in duration-500">
-                  <div className="w-64 h-64 bg-gray-200 rounded-2xl overflow-hidden relative border-4 border-white shadow-xl mb-6">
-                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/hero_wig_curly_1778364916891.png')" }}></div>
-                  </div>
-                  <h3 className="text-xl font-bold text-green-600 mb-2 flex items-center">
-                    <CheckCircle className="mr-2" /> Flawless Fit!
-                  </h3>
-                  <p className="text-gray-500 text-sm mb-6">The Nano Banana AI successfully blended the 16" Water Wave lace.</p>
-                  <div className="flex space-x-4">
-                    <button 
-                      onClick={() => setTryOnState('idle')}
-                      className="px-6 py-3 border rounded-xl font-bold hover:bg-gray-100 transition"
-                    >
-                      Try Another Photo
-                    </button>
-                    <button 
-                      onClick={() => { setIsTryOnModalOpen(false); handleAddToCart(); }}
-                      className="px-6 py-3 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition shadow-lg"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </div>
-      )}
+      <TryOnModal
+        isOpen={isTryOnModalOpen}
+        onClose={() => setIsTryOnModalOpen(false)}
+        onAddToCart={handleAddToCart}
+        wigImageUrl={activeImage}
+        wigName="Ready to Go Blonde Highlight Water Wave Bob Wig"
+      />
     </div>
   );
 }
