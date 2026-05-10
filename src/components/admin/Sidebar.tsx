@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Package, Users, ShoppingCart, Settings, LayoutDashboard, LogOut, FileText } from 'lucide-react';
+import { Package, Users, ShoppingCart, Settings, LayoutDashboard, LogOut, FileText, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function AdminSidebar() {
@@ -15,6 +15,7 @@ export default function AdminSidebar() {
     { name: 'Users', href: '/admin/users', icon: Users },
     { name: 'Vendors', href: '/admin/vendors', icon: Users },
     { name: 'Pages', href: '/admin/pages', icon: FileText },
+    { name: 'Try-On AI', href: '/admin/try-on', icon: Sparkles },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 

@@ -6,18 +6,16 @@
  * ==============================================================================
  * This component handles the full try-on flow:
  *
- * CURRENT STATE (MVP Demo):
+ * CURRENT STATE:
  *   - Real file upload via <input type="file"> with image preview
  *   - Real camera access via navigator.mediaDevices.getUserMedia
- *   - Canvas compositing: blends the user's photo with the wig image
- *     to produce a realistic-looking demo result
+ *   - Calls /api/try-on/generate (Gemini 2.0 Flash image generation)
+ *   - Auto-falls back to canvas compositing if GEMINI_API_KEY is not configured
  *
- * FUTURE STATE (Production):
- *   - Replace the `processWithCanvas()` function with an API call to
- *     the Nano Banana inference endpoint (e.g. POST /api/try-on)
- *   - The endpoint will accept { userImageBase64, wigImageUrl } and return
- *     a composited result image URL from the AI model
- *   - All UI states (uploading, processing, result) remain unchanged
+ * TO ACTIVATE REAL AI:
+ *   Add GEMINI_API_KEY to Vercel → Settings → Environment Variables
+ *   Get a key at: https://aistudio.google.com/app/apikey
+ *   No code changes required — the API route handles everything.
  * ==============================================================================
  */
 
@@ -168,33 +166,57 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
     setState('preview');
   };
 
-  // ── CANVAS COMPOSITING (MVP Demo) ────────────────────────────────────────────
-  /**
-   * FUTURE: Replace this function with:
-   *   const res = await fetch('/api/try-on', {
-   *     method: 'POST',
-   *     body: JSON.stringify({ userImage: userPhoto, wigImage: wigImageUrl }),
-   *   });
-   *   const { resultUrl } = await res.json();
-   *   setResultImage(resultUrl);
-   */
-  const processWithCanvas = useCallback(async () => {
+  // ── MAIN PROCESS FUNCTION ────────────────────────────────────────────────────
+  // Tries the real Gemini API first; falls back to canvas if key not configured.
+  const processTryOn = useCallback(async () => {
     if (!userPhoto || !canvasRef.current) return;
 
-    // Check rate limit before processing
+    // Rate limit check
     const allowed = await checkRateLimit('current-product');
     if (!allowed) return;
 
     setState('processing');
     setProcessingStep(0);
 
-    // Animate through processing steps
-    for (let i = 0; i < PROCESSING_STEPS.length; i++) {
-      await new Promise(r => setTimeout(r, 700));
-      setProcessingStep(i + 1);
+    // Animate steps while we wait for the API
+    const stepInterval = setInterval(() => {
+      setProcessingStep(prev => Math.min(prev + 1, PROCESSING_STEPS.length));
+    }, 900);
+
+    try {
+      // Extract base64 from data URL ("data:image/jpeg;base64,XXXX" → "XXXX")
+      const [header, base64] = userPhoto.split(',');
+      const mimeType = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+
+      // ── TRY REAL AI ──────────────────────────────────────────────────────────
+      const res = await fetch('/api/try-on/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userImageBase64: base64,
+          userImageMimeType: mimeType,
+          wigImageUrl,
+        }),
+      });
+
+      const data = await res.json();
+      clearInterval(stepInterval);
+      setProcessingStep(PROCESSING_STEPS.length);
+
+      if (data.mode === 'ai' && data.resultBase64) {
+        // Real AI result
+        setResultImage(`data:${data.mimeType};base64,${data.resultBase64}`);
+        setState('result');
+        return;
+      }
+
+      // mode === 'canvas' (no key configured, quota exceeded, or API error) → fall through
+    } catch {
+      clearInterval(stepInterval);
     }
 
-    // Composite: draw user photo, then overlay wig at top of frame with multiply blend
+    // ── CANVAS FALLBACK ───────────────────────────────────────────────────────
+    // Used when GEMINI_API_KEY is not set or API is unavailable.
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -206,11 +228,8 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
       userImg.onload = () => {
         canvas.width = userImg.width;
         canvas.height = userImg.height;
-
-        // Base: user photo
         ctx.drawImage(userImg, 0, 0);
 
-        // Wig overlay: positioned at top ~30% of the image, centred
         const wigImg = new Image();
         wigImg.crossOrigin = 'anonymous';
         wigImg.src = wigImageUrl;
@@ -219,25 +238,16 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
           const wigH = (wigImg.height / wigImg.width) * wigW;
           const wigX = (canvas.width - wigW) / 2;
           const wigY = canvas.height * 0.01;
-
           ctx.globalAlpha = 0.88;
           ctx.globalCompositeOperation = 'multiply';
           ctx.drawImage(wigImg, wigX, wigY, wigW, wigH);
-
-          // Reset
           ctx.globalAlpha = 1;
           ctx.globalCompositeOperation = 'source-over';
-
           setResultImage(canvas.toDataURL('image/jpeg', 0.92));
           setState('result');
           resolve();
         };
-        wigImg.onerror = () => {
-          // Fallback: just show user photo if wig image fails to load cross-origin
-          setResultImage(userPhoto);
-          setState('result');
-          resolve();
-        };
+        wigImg.onerror = () => { setResultImage(userPhoto); setState('result'); resolve(); };
       };
       userImg.onerror = () => {
         setErrorMsg('Failed to process your photo. Please try again.');
@@ -245,7 +255,7 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
         resolve();
       };
     });
-  }, [userPhoto, wigImageUrl]);
+  }, [userPhoto, wigImageUrl, checkRateLimit]);
 
   if (!isOpen) return null;
 
@@ -373,7 +383,7 @@ export default function TryOnModal({ isOpen, onClose, onAddToCart, wigImageUrl, 
                   <RotateCcw size={14} /> Retake
                 </button>
                 <button
-                  onClick={processWithCanvas}
+                  onClick={processTryOn}
                   className="flex-1 bg-black text-white py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition flex items-center justify-center gap-2"
                 >
                   <Sparkles size={16} /> Try On Now

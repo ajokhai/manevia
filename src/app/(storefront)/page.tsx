@@ -105,10 +105,11 @@ function StarRating({ count }: { count: number }) {
 function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
   const discount = Math.round((1 - product.price / product.compare) * 100);
   return (
-    <Link href={`/products/${product.slug}`} className="group flex-shrink-0 w-64 sm:w-72">
-      <div className="relative aspect-[3/4] bg-gray-100 rounded-2xl overflow-hidden mb-3">
+    <Link href={`/products/${product.slug}`} className="group flex-shrink-0 w-56 sm:w-64 flex flex-col">
+      {/* Fixed image height — all cards are uniform regardless of CDN image ratio */}
+      <div className="relative h-80 w-full bg-gray-100 rounded-2xl overflow-hidden mb-3 flex-shrink-0">
         <div
-          className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+          className="absolute inset-0 bg-cover bg-top group-hover:scale-105 transition-transform duration-500"
           style={{ backgroundImage: `url('${product.img}')` }}
         />
         {product.badge && (
@@ -124,8 +125,9 @@ function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
           -{discount}%
         </span>
       </div>
+      {/* Text section — flex-col keeps prices always at same level */}
       <StarRating count={product.reviews} />
-      <h3 className="text-sm font-medium text-gray-900 mt-1 mb-1.5 line-clamp-2 group-hover:text-amber-600 transition-colors leading-snug">
+      <h3 className="text-sm font-medium text-gray-900 mt-1 mb-1.5 line-clamp-2 group-hover:text-amber-600 transition-colors leading-snug flex-1">
         {product.name}
       </h3>
       <div className="flex items-center gap-2">
