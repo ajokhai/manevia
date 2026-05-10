@@ -92,7 +92,13 @@ export default function Footer() {
               href="/vendors/apply"
               className="inline-block bg-amber-500 text-black text-xs font-bold px-4 py-2.5 rounded-full hover:bg-amber-400 transition uppercase tracking-wider"
             >
-              Apply to Sell →
+              Apply to Sell &rarr;
+            </Link>
+            <Link
+              href="/vendors/login"
+              className="block mt-3 text-xs text-white/40 hover:text-white transition"
+            >
+              Already a vendor? Sign in &rarr;
             </Link>
           </div>
 

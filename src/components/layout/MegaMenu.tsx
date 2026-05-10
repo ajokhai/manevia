@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, Search, ShoppingBag, User, X } from 'lucide-react';
+import { useCartStore } from '@/store/cartStore';
 
 export default function MegaMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { items, toggleCart } = useCartStore();
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -66,9 +69,11 @@ export default function MegaMenu() {
           <div className="flex items-center space-x-4">
             <button className="text-gray-900 hover:text-amber-600"><Search size={20} /></button>
             <Link href="/account" className="text-gray-900 hover:text-amber-600"><User size={20} /></Link>
-            <button className="text-gray-900 hover:text-amber-600 relative">
+            <button onClick={toggleCart} className="text-gray-900 hover:text-amber-600 relative">
               <ShoppingBag size={20} />
-              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
             </button>
           </div>
         </div>
@@ -77,9 +82,17 @@ export default function MegaMenu() {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="md:hidden bg-white border-t p-4 space-y-4">
-          <Link href="/collections/best-sellers" className="block font-semibold">BEST SELLERS</Link>
-          <Link href="/collections/texture" className="block font-semibold">TEXTURE</Link>
-          <Link href="/collections/lace-design" className="block font-semibold">LACE DESIGN</Link>
+          <Link href="/collections/best-sellers" onClick={() => setIsOpen(false)} className="block font-semibold">BEST SELLERS</Link>
+          <p className="text-xs uppercase text-gray-400 font-semibold tracking-wider pt-2">Texture</p>
+          <Link href="/collections/straight" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">Straight</Link>
+          <Link href="/collections/body-wave" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">Body Wave</Link>
+          <Link href="/collections/deep-wave" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">Deep Wave</Link>
+          <Link href="/collections/kinky-curly" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">Kinky Curly</Link>
+          <p className="text-xs uppercase text-gray-400 font-semibold tracking-wider pt-2">Lace Design</p>
+          <Link href="/collections/glueless" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">Glueless Wear Go</Link>
+          <Link href="/collections/13x4-frontal" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">13x4 Lace Front</Link>
+          <Link href="/collections/5x5-closure" onClick={() => setIsOpen(false)} className="block text-sm pl-2 text-gray-700">5x5 Closure</Link>
+          <Link href="/collections/new-arrivals" onClick={() => setIsOpen(false)} className="block font-semibold pt-2">NEW IN</Link>
         </div>
       )}
     </header>
