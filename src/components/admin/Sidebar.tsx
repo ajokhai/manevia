@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Package, Users, ShoppingCart, Settings, LayoutDashboard, LogOut, FileText, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -61,7 +62,10 @@ export default function AdminSidebar() {
         </Link>
       </nav>
       <div className="p-4 border-t">
-        <button className="flex items-center px-4 py-3 text-sm font-medium rounded-lg hover:bg-red-50 text-red-600 w-full transition">
+        <button
+          onClick={() => router.push('/admin/login')}
+          className="flex items-center px-4 py-3 text-sm font-medium rounded-lg hover:bg-red-50 text-red-600 w-full transition"
+        >
           <LogOut size={18} className="mr-3" />
           Log Out
         </button>
