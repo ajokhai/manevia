@@ -45,11 +45,11 @@ export default function AccountPage() {
             <p className="text-xs text-gray-400">Manage shipping info</p>
           </div>
         </Link>
-        <Link href="/vendors/login" className="flex items-center gap-3 p-5 border rounded-2xl hover:border-amber-300 hover:bg-amber-50/30 transition">
+        <Link href="/pages/contact" className="flex items-center gap-3 p-5 border rounded-2xl hover:border-amber-300 hover:bg-amber-50/30 transition">
           <LogIn size={20} className="text-gray-400" />
           <div>
-            <p className="font-semibold text-sm">Vendor Portal</p>
-            <p className="text-xs text-gray-400">Sign in as a seller</p>
+            <p className="font-semibold text-sm">Help Center</p>
+            <p className="text-xs text-gray-400">FAQs & support</p>
           </div>
         </Link>
       </div>

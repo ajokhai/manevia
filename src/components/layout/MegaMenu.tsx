@@ -7,6 +7,7 @@ import { useCartStore } from '@/store/cartStore';
 
 export default function MegaMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { items, toggleCart } = useCartStore();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -67,7 +68,7 @@ export default function MegaMenu() {
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            <button className="text-gray-900 hover:text-amber-600"><Search size={20} /></button>
+            <button onClick={() => setIsSearchOpen(true)} className="text-gray-900 hover:text-amber-600"><Search size={20} /></button>
             <Link href="/account" className="text-gray-900 hover:text-amber-600"><User size={20} /></Link>
             <button onClick={toggleCart} className="text-gray-900 hover:text-amber-600 relative">
               <ShoppingBag size={20} />
@@ -78,6 +79,25 @@ export default function MegaMenu() {
           </div>
         </div>
       </nav>
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div className="absolute inset-0 bg-white z-[60] flex items-center px-4 sm:px-8 border-b animate-in fade-in slide-in-from-top duration-200">
+          <div className="max-w-7xl mx-auto w-full flex items-center gap-4">
+            <Search size={24} className="text-gray-400" />
+            <input 
+              autoFocus
+              type="text" 
+              placeholder="Search for luxury wigs, textures, or lace..."
+              className="flex-1 text-lg sm:text-xl outline-none py-4"
+              onKeyDown={(e) => e.key === 'Escape' && setIsSearchOpen(false)}
+            />
+            <button onClick={() => setIsSearchOpen(false)} className="text-gray-500 hover:text-black p-2">
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (

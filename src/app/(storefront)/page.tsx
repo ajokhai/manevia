@@ -143,49 +143,47 @@ export default function Home() {
     <div className="bg-white">
 
       {/* Hero */}
-      <section className="relative h-[88vh] overflow-hidden">
-        <div className="absolute inset-0 grid grid-cols-2">
-          {/* Left copy */}
-          <div className="bg-[#fdf6ee] flex flex-col justify-center px-12 md:px-20 lg:px-28">
-            <span className="text-amber-600 text-xs font-bold uppercase tracking-[0.25em] mb-5">New Season Arrivals</span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-gray-900 leading-[1.05] mb-6">
-              The Glueless<br />Revolution.
-            </h1>
-            <p className="text-gray-500 text-base mb-10 max-w-xs leading-relaxed">
-              Premium 100% human hair wigs. Ready to wear. Zero glue, zero effort, infinite confidence.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/collections/glueless"
-                className="bg-black text-white px-8 py-3.5 font-semibold text-sm rounded-full hover:bg-gray-800 transition">
-                Shop Glueless
-              </Link>
-              <Link href="/collections/best-sellers"
-                className="border border-black text-black px-8 py-3.5 font-semibold text-sm rounded-full hover:bg-black hover:text-white transition flex items-center gap-2">
-                Best Sellers <ArrowRight size={16} />
-              </Link>
-            </div>
+      <section className="relative min-h-[80vh] md:h-[88vh] flex flex-col md:grid md:grid-cols-2 overflow-hidden">
+        {/* Left copy */}
+        <div className="bg-[#fdf6ee] flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-28 py-12 md:py-0 relative z-10 flex-1">
+          <span className="text-amber-600 text-xs font-bold uppercase tracking-[0.25em] mb-3 md:mb-5">New Season Arrivals</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-gray-900 leading-[1.05] mb-4 md:mb-6">
+            The Glueless<br />Revolution.
+          </h1>
+          <p className="text-gray-500 text-sm md:text-base mb-6 md:mb-10 max-w-xs leading-relaxed">
+            Premium 100% human hair wigs. Ready to wear. Zero glue, zero effort, infinite confidence.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/collections/glueless"
+              className="bg-black text-white px-6 md:px-8 py-3 md:py-3.5 font-semibold text-sm rounded-full hover:bg-gray-800 transition text-center min-w-[140px]">
+              Shop Glueless
+            </Link>
+            <Link href="/collections/best-sellers"
+              className="border border-black text-black px-6 md:px-8 py-3 md:py-3.5 font-semibold text-sm rounded-full hover:bg-black hover:text-white transition flex items-center justify-center gap-2 min-w-[140px]">
+              Best Sellers <ArrowRight size={16} />
+            </Link>
           </div>
-          {/* Right image */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-cover bg-top"
-              style={{ backgroundImage: "url('/assets/hero_wig_straight_1778364904239.png')" }} />
-          </div>
+        </div>
+        {/* Right image */}
+        <div className="relative h-[40vh] md:h-full flex-1">
+          <div className="absolute inset-0 bg-cover bg-top"
+            style={{ backgroundImage: "url('/assets/hero_wig_straight_1778364904239.png')" }} />
         </div>
       </section>
 
       {/* Trust bar */}
-      <div className="bg-black text-white text-xs tracking-widest uppercase flex items-center justify-center gap-12 py-3.5">
+      <div className="bg-black text-white text-[10px] sm:text-xs tracking-widest uppercase flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-12 gap-y-1 py-3 px-4 text-center">
         <span>Free Shipping Over $99</span>
-        <span className="opacity-30">|</span>
+        <span className="opacity-30 hidden sm:inline">|</span>
         <span>30-Day Free Returns</span>
-        <span className="opacity-30">|</span>
+        <span className="opacity-30 hidden sm:inline">|</span>
         <span>100% Virgin Human Hair</span>
-        <span className="opacity-30">|</span>
+        <span className="opacity-30 hidden sm:inline">|</span>
         <span>AI Virtual Try-On ✨</span>
       </div>
 
       {/* Best Sellers — horizontal scroll */}
-      <section className="py-20">
+      <section className="py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-8">
             <div>
@@ -196,7 +194,7 @@ export default function Home() {
               View All <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
             {PRODUCTS.slice(0, 5).map((p) => (
               <div key={p.id} className="snap-start">
                 <ProductCard product={p} />
