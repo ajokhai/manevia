@@ -1,5 +1,5 @@
 import { put } from '@vercel/blob';
-import { NextResponse } from 'next/response';
+import { NextResponse } from 'next/server';
 
 /**
  * ==============================================================================
