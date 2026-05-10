@@ -25,7 +25,7 @@ export default function Footer() {
 
       {/* Main footer links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
@@ -80,6 +80,20 @@ export default function Footer() {
               <li><Link href="/pages/terms" className="hover:text-white transition">Terms & Conditions</Link></li>
               <li><Link href="/pages/cookies" className="hover:text-white transition">Cookie Policy</Link></li>
             </ul>
+          </div>
+
+          {/* Sell on Manevia */}
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-white/40 mb-5">Sell on Manevia</h4>
+            <p className="text-sm text-white/50 leading-relaxed mb-4">
+              Carry your brand inside a luxury marketplace. Apply to become a Manevia vendor and reach thousands of hair enthusiasts.
+            </p>
+            <Link
+              href="/vendors/apply"
+              className="inline-block bg-amber-500 text-black text-xs font-bold px-4 py-2.5 rounded-full hover:bg-amber-400 transition uppercase tracking-wider"
+            >
+              Apply to Sell →
+            </Link>
           </div>
 
           {/* Trust */}
