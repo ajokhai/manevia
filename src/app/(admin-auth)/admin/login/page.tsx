@@ -22,24 +22,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
       {/* Left — Branded Panel */}
-      <div
-        className="hidden lg:flex flex-col justify-between p-14 bg-[#0a0a0a] text-white relative overflow-hidden"
-      >
-        {/* Subtle texture overlay */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `url('/assets/hero_wig_curly_1778364916891.png')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%)'
-        }} />
+      <div className="hidden lg:flex flex-col justify-between p-14 bg-[#0a0a0a] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: "url('/assets/hero_wig_curly_1778364916891.png')", backgroundSize: 'cover', backgroundPosition: 'center', filter: 'grayscale(100%)' }} />
 
-        {/* Top: Brand */}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">Admin Portal</p>
           <h1 className="text-4xl font-bold tracking-tight">Manevia</h1>
         </div>
 
-        {/* Middle: Quote */}
         <div className="relative z-10">
           <p className="text-2xl font-light leading-snug text-white/70 max-w-sm">
             "Luxury is in each detail."
@@ -47,7 +38,6 @@ export default function AdminLoginPage() {
           <p className="text-xs text-white/30 mt-4 uppercase tracking-widest">— Hubert de Givenchy</p>
         </div>
 
-        {/* Bottom: link */}
         <div className="relative z-10">
           <Link href="/" className="text-xs text-white/30 hover:text-white/60 transition uppercase tracking-widest">
             ← Back to Storefront
@@ -59,7 +49,6 @@ export default function AdminLoginPage() {
       <div className="flex flex-col justify-center px-8 sm:px-16 lg:px-20 bg-white">
         <div className="w-full max-w-sm mx-auto">
 
-          {/* Mobile brand */}
           <div className="lg:hidden mb-10">
             <p className="text-xs uppercase tracking-[0.3em] text-gray-400 mb-1">Admin Portal</p>
             <h1 className="text-3xl font-bold">Manevia</h1>
@@ -69,7 +58,6 @@ export default function AdminLoginPage() {
           <p className="text-sm text-gray-400 mb-10">Sign in to manage your store.</p>
 
           <form onSubmit={handleLogin} className="space-y-6">
-
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Email</label>
               <input
@@ -110,11 +98,10 @@ export default function AdminLoginPage() {
               disabled={isLoading}
               className="w-full bg-black text-white py-4 rounded-xl font-semibold text-sm tracking-wide hover:bg-gray-900 transition-all shadow-sm disabled:opacity-60 flex items-center justify-center gap-2"
             >
-              {isLoading ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : 'Sign In'}
+              {isLoading
+                ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                : 'Sign In'}
             </button>
-
           </form>
 
           <p className="text-center mt-10 text-xs text-gray-300 lg:hidden">
@@ -122,7 +109,6 @@ export default function AdminLoginPage() {
           </p>
         </div>
       </div>
-
     </div>
   );
 }
